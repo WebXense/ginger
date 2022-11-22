@@ -3,6 +3,7 @@ package ginger
 import (
 	"reflect"
 
+	"github.com/WebXense/sql"
 	"github.com/gin-gonic/gin"
 )
 
@@ -31,6 +32,16 @@ func GetRequest[T any](ctx *gin.Context) *T {
 	}
 
 	return request
+}
+
+// GetPaginationRequest get pagination request from the gin context.
+func GetPaginationRequest(ctx *gin.Context) *sql.Pagination {
+	return GetRequest[sql.Pagination](ctx)
+}
+
+// GetSortRequest get sort request from the gin context.
+func GetSortRequest(ctx *gin.Context) *sql.Sort {
+	return GetRequest[sql.Sort](ctx)
 }
 
 // parseTags get the tags related to the request method
