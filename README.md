@@ -1,2 +1,2 @@
 # ginger
-Use gin in easiler way.
+Use gin in easier way.
