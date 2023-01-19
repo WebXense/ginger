@@ -13,7 +13,7 @@ type Response struct {
 }
 
 type Error struct {
-	Code    int    `json:"code"`
+	Code    string    `json:"code"`
 	Message string `json:"message"`
 }
 
@@ -27,7 +27,7 @@ func OK(ctx *gin.Context, data interface{}, p *sql.Pagination) {
 	ctx.JSON(200, resp)
 }
 
-func ERR(ctx *gin.Context, errCode int, errMsg string, data any) {
+func ERR(ctx *gin.Context, errCode string, errMsg string, data any) {
 	resp := &Response{
 		Success: false,
 		Error: &Error{
