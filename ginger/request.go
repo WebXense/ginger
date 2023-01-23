@@ -20,11 +20,11 @@ func GetRequest[T any](ctx *gin.Context) *T {
 	for _, tag := range tags {
 		switch tag {
 		case tag_json:
-			err = ctx.ShouldBindJSON(request)
+			err = ctx.BindJSON(request)
 		case tag_form:
-			err = ctx.ShouldBindQuery(request)
+			err = ctx.BindQuery(request)
 		case tag_uri:
-			err = ctx.ShouldBindUri(request)
+			err = ctx.BindUri(request)
 		}
 		if err != nil {
 			panic(err)
