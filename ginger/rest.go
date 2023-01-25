@@ -1,23 +1,28 @@
 package ginger
 
 import (
-	"github.com/WebXense/sql"
 	"github.com/gin-gonic/gin"
 )
 
+type Pagination struct {
+	Page  int `json:"page"`
+	Size  int `json:"size"`
+	Total int `json:"total"`
+}
+
 type Response struct {
-	Success    bool            `json:"success"`
-	Error      *Error          `json:"error,omitempty"`
-	Pagination *sql.Pagination `json:"pagination,omitempty"`
-	Data       interface{}     `json:"data,omitempty"`
+	Success    bool        `json:"success"`
+	Error      *Error      `json:"error,omitempty"`
+	Pagination *Pagination `json:"pagination,omitempty"`
+	Data       interface{} `json:"data,omitempty"`
 }
 
 type Error struct {
-	Code    string    `json:"code"`
+	Code    string `json:"code"`
 	Message string `json:"message"`
 }
 
-func OK(ctx *gin.Context, data interface{}, p *sql.Pagination) {
+func OK(ctx *gin.Context, data interface{}, p *Pagination) {
 	resp := &Response{
 		Success:    true,
 		Data:       data,
