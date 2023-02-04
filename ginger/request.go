@@ -7,12 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const tag_uri = "uri"
-const tag_json = "json"
-const tag_form = "form"
-
-// GetRequest get request object from the gin context.
-func GetRequest[T any](ctx *gin.Context) *T {
+// Request get request object from the gin context.
+func Request[T any](ctx *gin.Context) *T {
 	request := new(T)
 	tags := parseTags(request)
 
@@ -30,14 +26,14 @@ func GetRequest[T any](ctx *gin.Context) *T {
 	return request
 }
 
-// GetPaginationRequest get pagination request from the gin context.
-func GetPaginationRequest(ctx *gin.Context) *sql.Pagination {
-	return GetRequest[sql.Pagination](ctx)
+// PaginationRequest get pagination request from the gin context.
+func PaginationRequest(ctx *gin.Context) *sql.Pagination {
+	return Request[sql.Pagination](ctx)
 }
 
-// GetSortRequest get sort request from the gin context.
-func GetSortRequest(ctx *gin.Context) *sql.Sort {
-	return GetRequest[sql.Sort](ctx)
+// SortRequest get sort request from the gin context.
+func SortRequest(ctx *gin.Context) *sql.Sort {
+	return Request[sql.Sort](ctx)
 }
 
 // parseTags get the tags related to the request method

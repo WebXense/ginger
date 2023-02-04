@@ -1,6 +1,7 @@
 package ginger
 
 import (
+	"github.com/WebXense/env"
 	"github.com/gin-gonic/gin"
 )
 
@@ -28,11 +29,13 @@ func OK(ctx *gin.Context, data interface{}, p *Pagination) {
 		Data:       data,
 		Pagination: p,
 	}
-	ctx.Set("response", resp) // write to ctx for perform tests
+	if env.String("GIN_MODE") == GIN_MODE_TEST {
+		ctx.Set("response", resp) // write to ctx for perform tests
+	}
 	ctx.JSON(200, resp)
 }
 
-func ERR(ctx *gin.Context, errCode string, errMsg string, data any) {
+func ERR(ctx *gin.Context, errCode, errMsg string, data any) {
 	resp := &Response{
 		Success: false,
 		Error: &Error{
@@ -41,6 +44,8 @@ func ERR(ctx *gin.Context, errCode string, errMsg string, data any) {
 		},
 		Data: data,
 	}
-	ctx.Set("response", resp) // write to ctx for perform tests
+	if env.String("GIN_MODE") == GIN_MODE_TEST {
+		ctx.Set("response", resp) // write to ctx for perform tests
+	}
 	ctx.JSON(200, resp)
 }

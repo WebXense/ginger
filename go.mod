@@ -3,6 +3,7 @@ module github.com/WebXense/ginger
 go 1.19
 
 require (
+	github.com/WebXense/env v1.1.0
 	github.com/WebXense/sql v1.0.3
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.8.1
