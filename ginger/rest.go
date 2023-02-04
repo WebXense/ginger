@@ -29,7 +29,7 @@ func OK(ctx *gin.Context, data interface{}, p *Pagination) {
 		Data:       data,
 		Pagination: p,
 	}
-	if env.String("GIN_MODE") == GIN_MODE_TEST {
+	if env.String("GIN_MODE", true) == GIN_MODE_TEST {
 		ctx.Set("response", resp) // write to ctx for perform tests
 	}
 	ctx.JSON(200, resp)
@@ -44,7 +44,7 @@ func ERR(ctx *gin.Context, errCode, errMsg string, data any) {
 		},
 		Data: data,
 	}
-	if env.String("GIN_MODE") == GIN_MODE_TEST {
+	if env.String("GIN_MODE", true) == GIN_MODE_TEST {
 		ctx.Set("response", resp) // write to ctx for perform tests
 	}
 	ctx.JSON(200, resp)
