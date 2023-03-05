@@ -9,21 +9,27 @@ import (
 
 // Request get request object from the gin context.
 func Request[T any](ctx *gin.Context) *T {
-	request := new(T)
-	tags := parseTags(request)
+	objects := make([]T, 0)
+	tags := parseTags(new(T))
 
 	for _, tag := range tags {
 		switch tag {
 		case tag_json:
+			request := new(T)
 			ctx.ShouldBindJSON(request)
+			objects = append(objects, *request)
 		case tag_form:
+			request := new(T)
 			ctx.ShouldBindQuery(request)
+			objects = append(objects, *request)
 		case tag_uri:
+			request := new(T)
 			ctx.ShouldBindUri(request)
+			objects = append(objects, *request)
 		}
 	}
 
-	return request
+	return updateObjectFromObjects(objects)
 }
 
 // PaginationRequest get pagination request from the gin context.
@@ -56,4 +62,37 @@ func parseTags[T any](request T) []string {
 		result = append(result, key)
 	}
 	return result
+}
+
+func updateObjectFromObjects[T any](objects []T) *T {
+	if len(objects) == 0 {
+		return nil
+	}
+
+	objectVal := reflect.ValueOf(new(T)).Elem()
+	for _, o := range objects {
+		val := reflect.ValueOf(o)
+		for i := 0; i < val.NumField(); i++ {
+			field := val.Field(i)
+			if !field.IsZero() {
+				switch field.Kind() {
+				case reflect.String:
+					objectVal.Field(i).SetString(field.String())
+				case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+					objectVal.Field(i).SetInt(field.Int())
+				case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+					objectVal.Field(i).SetUint(field.Uint())
+				case reflect.Float32, reflect.Float64:
+					objectVal.Field(i).SetFloat(field.Float())
+				case reflect.Bool:
+					objectVal.Field(i).SetBool(field.Bool())
+				case reflect.Slice, reflect.Array, reflect.Map, reflect.Struct, reflect.Ptr:
+					objectVal.Field(i).Set(field)
+				}
+			}
+		}
+	}
+
+	output := objectVal.Interface().(T)
+	return &output
 }
